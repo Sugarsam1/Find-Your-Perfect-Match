@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Love Match</title>
+    <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fbd3e9, #bb377d);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    select, input[type="date"], button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 2px solid #bb377d;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #bb377d;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #9c2c66;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #bb377d;
+    }
+  </style>
+</head>
+<body>
+    <h1>🔮 Check If You Match With Your Patner</h1>
+  <div class="container">
+    <label for="sign1">Choose Your Sign or Date of Birth</label>
+    <select id="sign1">
+      <option value="">-- Choose Sign --</option>
+    </select>
+    <input type="date" id="birth1" onchange="detectSign(this.value, 'sign1')" />
+
+    <label for="sign2">Choose Their Sign or Date of Birth</label>
+    <select id="sign2">
+      <option value="">-- Choose Sign --</option>
+    </select>
+    <input type="date" id="birth2" onchange="detectSign(this.value, 'sign2')" />
+
+    <button onclick="checkCompatibility()">Check Compatibility</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const signs = [
+      "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+      "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+    ];
+
+    const compatibilityData = {
+      "Aries": ["Leo", "Sagittarius", "Gemini", "Aquarius"],
+      "Taurus": ["Virgo", "Capricorn", "Cancer", "Pisces"],
+      "Gemini": ["Libra", "Aquarius", "Aries", "Leo"],
+      "Cancer": ["Scorpio", "Pisces", "Taurus", "Virgo"],
+      "Leo": ["Aries", "Sagittarius", "Gemini", "Libra"],
+      "Virgo": ["Taurus", "Capricorn", "Cancer", "Scorpio"],
+      "Libra": ["Gemini", "Aquarius", "Leo", "Sagittarius"],
+      "Scorpio": ["Cancer", "Pisces", "Virgo", "Capricorn"],
+      "Sagittarius": ["Aries", "Leo", "Libra", "Aquarius"],
+      "Capricorn": ["Taurus", "Virgo", "Scorpio", "Pisces"],
+      "Aquarius": ["Gemini", "Libra", "Aries", "Sagittarius"],
+      "Pisces": ["Cancer", "Scorpio", "Taurus", "Capricorn"]
+    };
+
+    const descriptions = {
+      "match": "💖 Great match! You two vibe on the same wavelength!",
+      "maybe": "✨ Could work! There's potential, but it may take effort.",
+      "nope": "😬 Not the stars’ favorite combo... but love is mysterious!"
+    };
+
+    function populateSigns() {
+      const s1 = document.getElementById("sign1");
+      const s2 = document.getElementById("sign2");
+      signs.forEach(sign => {
+        const o1 = document.createElement("option");
+        o1.value = sign;
+        o1.textContent = sign;
+        s1.appendChild(o1);
+
+        const o2 = document.createElement("option");
+        o2.value = sign;
+        o2.textContent = sign;
+        s2.appendChild(o2);
+      });
+    }
+
+    function detectSign(dateStr, targetSelectId) {
+      if (!dateStr) return;
+      const date = new Date(dateStr);
+      const month = date.getUTCMonth() + 1;
+      const day = date.getUTCDate();
+      const sign = getZodiacSign(month, day);
+      document.getElementById(targetSelectId).value = sign;
+    }
+
+    function getZodiacSign(month, day) {
+      if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Aquarius";
+      if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Pisces";
+      if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Aries";
+      if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taurus";
+      if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return "Gemini";
+      if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return "Cancer";
+      if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "Leo";
+      if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "Virgo";
+      if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return "Libra";
+      if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return "Scorpio";
+      if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return "Sagittarius";
+      if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return "Capricorn";
+    }
+
+    function checkCompatibility() {
+      const s1 = document.getElementById("sign1").value;
+      const s2 = document.getElementById("sign2").value;
+      const resultDiv = document.getElementById("result");
+
+      if (!s1 || !s2) {
+        resultDiv.textContent = "Please select both signs or birthdates!";
+        return;
+      }
+
+      if (compatibilityData[s1].includes(s2)) {
+        resultDiv.textContent = `${s1} ❤️ ${s2}: ${descriptions.match}`;
+      } else if (s1 === s2 || compatibilityData[s2].includes(s1)) {
+        resultDiv.textContent = `${s1} 🤝 ${s2}: ${descriptions.maybe}`;
+      } else {
+        resultDiv.textContent = `${s1} ❌ ${s2}: ${descriptions.nope}`;
+      }
+    }
+
+    populateSigns();
+  </script>
+</body>
+</html>
